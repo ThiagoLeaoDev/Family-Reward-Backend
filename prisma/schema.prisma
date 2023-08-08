@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model category {
+  id    String @id(map: "pk_1") @default(uuid())
+  name  String @db.VarChar(255)
+  image String @db.VarChar(255)
+  task  task[]
+}
+
+model execution {
+  id            String @id(map: "pk_4") @default(uuid())
+  before_image  String @db.VarChar(255)
+  after_image   String @db.VarChar(255)
+  status        String @db.VarChar(50)
+  executed_by   String @db.Uuid
+  task_executed String @db.Uuid
+  user          user   @relation(fields: [executed_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_3_execution_user")
+  task          task   @relation(fields: [task_executed], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_4_execution_task")
+
+  @@index([executed_by], map: "idx_executed_by")
+  @@index([task_executed], map: "idx_task_executed")
+}
+
+model task {
+  id            String      @id(map: "pk_3") @default(uuid())
+  name          String      @db.VarChar(255)
+  image         String      @db.VarChar(255)
+  value         Decimal     @db.Money
+  description   String?     @db.VarChar(2000)
+  category_task String      @db.Uuid
+  created_by    String      @db.Uuid
+  execution     execution[]
+  category      category    @relation(fields: [category_task], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_1_task_category")
+  user          user        @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_2_task_user")
+
+  @@index([category_task], map: "idx_category_task")
+  @@index([created_by], map: "idx_created_by")
+}
+
+model user {
+  id        String      @id(map: "pk_2") @default(uuid())
+  name      String      @db.VarChar(255)
+  image     String      @db.VarChar(255)
+  role      String      @db.VarChar(255)
+  email     String      @db.VarChar(255)
+  password  String      @db.VarChar(255)
+  balance   Decimal     @db.Money
+  execution execution[]
+  task      task[]
+}

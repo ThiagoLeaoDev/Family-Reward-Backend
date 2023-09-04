@@ -2,7 +2,7 @@ import { Router } from "express";
 import { CreateCategoryController } from "../modules/categories/useCases/createCategory/CreateCategoryController";
 import { ReadCategoriesController } from "../modules/categories/useCases/readCategories/ReadCategoriesController";
 import { ReadAllTasksController } from "../modules/categories/useCases/readAllTasks/ReadAllTasksController";
-import { ReadOneCategoryController } from "../modules/categories/useCases/readOneCategory/readOneCategoryController";
+import { ReadOneCategoryController } from "../modules/categories/useCases/readOneCategory/ReadOneCategoryController";
 
 const createCategoryController = new CreateCategoryController();
 const readCategoriesController = new ReadCategoriesController();
